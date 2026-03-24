@@ -39,7 +39,7 @@ har/
 ### 3. 生成规则集
 
 ```bash
-python har2list.py har/doubao --name Doubao --policy Proxy
+python har2list.py har/doubao --name Doubao
 ```
 
 输出 `list/Doubao.list`：
@@ -47,24 +47,27 @@ python har2list.py har/doubao --name Doubao --policy Proxy
 ```
 # NAME: Doubao
 # AUTHOR: Gwen
-# UPDATED: 2026-03-24 05:43:39
-# HOST: 2
-# HOST-SUFFIX: 1
-# IP-CIDR: 4
-# TOTAL: 7
-HOST,lf3-short.ibytedapm.com,Proxy
-HOST,p6-flow-imagex-sign.byteimg.com,Proxy
-HOST-SUFFIX,doubao.com,Proxy
-IP-CIDR,198.18.20.31/32,Proxy
+# UPDATED: 2026-03-24 06:43:31
+# HOST: 4
+# HOST-SUFFIX: 2
+# IP-CIDR: 9
+# IP6-CIDR: 7
+# TOTAL: 22
+HOST,lf3-config.bytetcc.com
+HOST-SUFFIX,doubao.com
+IP-CIDR,198.18.20.31/32
+IP6-CIDR,240e:904:800:1804:3::3f8/128
 ...
 ```
+
+生成的规则**不包含策略名**，通过 Quantumult X 订阅配置中的 `force-policy` 指定策略。
 
 ## 补充模式（基于现有 .list 扩充）
 
 如果已有别人的规则集但觉得不够全，可以录制 HAR 后用 `--base` 补充：
 
 ```bash
-python har2list.py har/bilibili --base BiliBili.list --policy BiliBili
+python har2list.py har/bilibili --base BiliBili.list
 ```
 
 脚本会：
@@ -81,38 +84,37 @@ python har2list.py har/bilibili --base BiliBili.list --policy BiliBili
 |---|---|---|
 | `folder` | HAR 文件夹路径（必填） | - |
 | `--name` | 规则集名称 | 文件夹名 |
-| `--policy` | QX 策略名（Proxy / Direct / Reject 等） | 同 name |
 | `--output` | 输出文件路径 | `list/<name>.list` |
 | `--author` | 作者 | Gwen |
 | `--threshold` | 同根域名下 >= N 个子域名时合并为 HOST-SUFFIX | 2 |
 | `--exclude` | 排除匹配的域名（正则） | 无 |
-| `--no-ip` | 不生成 IP-CIDR 规则 | 默认生成 |
+| `--no-ip` | 不生成 IP-CIDR / IP6-CIDR 规则 | 默认生成 |
 | `--base` | 基于现有 .list 文件补充（补充模式） | 无 |
 
 ## 用法示例
 
 ```bash
 # 从零生成
-python har2list.py har/doubao --name Doubao --policy Proxy
+python har2list.py har/doubao --name Doubao
 
 # 指定作者和输出路径
-python har2list.py har/doubao --name Doubao --policy Proxy --author dum --output Doubao.list
+python har2list.py har/doubao --name Doubao --author dum --output Doubao.list
 
 # 排除 Google 和 CDN 公共域名
-python har2list.py har/twitter --name Twitter --policy Proxy \
+python har2list.py har/twitter --name Twitter \
     --exclude 'google' 'googleapis' 'gstatic' 'cdn\.jsdelivr'
 
-# 不要 IP-CIDR 规则
-python har2list.py har/doubao --name Doubao --policy Proxy --no-ip
+# 不要 IP 规则
+python har2list.py har/doubao --name Doubao --no-ip
 
 # 要求 >= 3 个子域名才合并为 HOST-SUFFIX
-python har2list.py har/doubao --name Doubao --policy Proxy --threshold 3
+python har2list.py har/doubao --name Doubao --threshold 3
 
 # 补充现有规则集
-python har2list.py har/bilibili --base BiliBili.list --policy BiliBili
+python har2list.py har/bilibili --base BiliBili.list
 
 # 补充并指定输出路径
-python har2list.py har/bilibili --base BiliBili.list --policy BiliBili --output BiliBili_full.list
+python har2list.py har/bilibili --base BiliBili.list --output BiliBili_full.list
 ```
 
 ## 规则合并逻辑
@@ -120,8 +122,9 @@ python har2list.py har/bilibili --base BiliBili.list --policy BiliBili --output 
 | 场景 | 规则类型 | 示例 |
 |---|---|---|
 | 某根域名下出现 >= threshold 个子域名 | `HOST-SUFFIX` | `HOST-SUFFIX,doubao.com` |
-| 某根域名下只有 1 个子域名 | `HOST` | `HOST,lf3-short.ibytedapm.com` |
-| HAR 中记录的服务器 IP | `IP-CIDR` | `IP-CIDR,198.18.20.31/32` |
+| 某根域名下只有 1 个子域名 | `HOST` | `HOST,lf3-config.bytetcc.com` |
+| HAR 中记录的 IPv4 服务器 IP | `IP-CIDR` | `IP-CIDR,198.18.20.31/32` |
+| HAR 中记录的 IPv6 服务器 IP | `IP6-CIDR` | `IP6-CIDR,240e:904:800:1804:3::3f8/128` |
 
 ## 提高覆盖率的建议
 
