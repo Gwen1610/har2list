@@ -1,29 +1,29 @@
 # NAME: Doubao
 # AUTHOR: Gwen
-# UPDATED: 2026-03-24 06:17:01
+# UPDATED: 2026-03-24 06:29:38
 # HOST: 4
 # HOST-SUFFIX: 2
 # IP-CIDR: 16
 # TOTAL: 22
-HOST,lf3-config.bytetcc.com,Proxy
-HOST,lf3-short.ibytedapm.com,Proxy
-HOST,mssdk.bytedance.com,Proxy
-HOST,p6-passport.byteacctimg.com,Proxy
-HOST-SUFFIX,byteimg.com,Proxy
-HOST-SUFFIX,doubao.com,Proxy
-IP-CIDR,124.239.239.170/32,Proxy
-IP-CIDR,198.18.20.31/32,Proxy
-IP-CIDR,198.18.20.33/32,Proxy
-IP-CIDR,198.18.20.34/32,Proxy
-IP-CIDR,198.18.20.55/32,Proxy
-IP-CIDR,220.181.136.155/32,Proxy
-IP-CIDR,220.181.136.248/32,Proxy
-IP-CIDR,220.181.136.254/32,Proxy
-IP-CIDR,220.181.164.127/32,Proxy
-IP-CIDR,240e:904:800:1804:3::3f8/128,Proxy
-IP-CIDR,240e:904:800:1f80::b00:99/128,Proxy
-IP-CIDR,240e:904:800:2801:3::80/128,Proxy
-IP-CIDR,240e:940:e01d:8:5e::a/128,Proxy
-IP-CIDR,240e:94c:4000:e01:1::f5/128,Proxy
-IP-CIDR,240e:979:802:302::f6/128,Proxy
-IP-CIDR,240e:b1:a826::52/128,Proxy
+HOST,lf3-config.bytetcc.com,Doubao
+HOST,lf3-short.ibytedapm.com,Doubao
+HOST,mssdk.bytedance.com,Doubao
+HOST,p6-passport.byteacctimg.com,Doubao
+HOST-SUFFIX,byteimg.com,Doubao
+HOST-SUFFIX,doubao.com,Doubao
+IP-CIDR,124.239.239.170/32,Doubao
+IP-CIDR,198.18.20.31/32,Doubao
+IP-CIDR,198.18.20.33/32,Doubao
+IP-CIDR,198.18.20.34/32,Doubao
+IP-CIDR,198.18.20.55/32,Doubao
+IP-CIDR,220.181.136.155/32,Doubao
+IP-CIDR,220.181.136.248/32,Doubao
+IP-CIDR,220.181.136.254/32,Doubao
+IP-CIDR,220.181.164.127/32,Doubao
+IP-CIDR,240e:904:800:1804:3::3f8/128,Doubao
+IP-CIDR,240e:904:800:1f80::b00:99/128,Doubao
+IP-CIDR,240e:904:800:2801:3::80/128,Doubao
+IP-CIDR,240e:940:e01d:8:5e::a/128,Doubao
+IP-CIDR,240e:94c:4000:e01:1::f5/128,Doubao
+IP-CIDR,240e:979:802:302::f6/128,Doubao
+IP-CIDR,240e:b1:a826::52/128,Doubao
