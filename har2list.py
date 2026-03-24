@@ -6,10 +6,10 @@ har2list.py - 从 HAR 文件夹生成 Quantumult X 分流规则集
     python har2list.py <har文件夹> [选项]
 
     # 从零生成
-    python har2list.py ./har/doubao --name Doubao
+    python har2list.py ./har/doubao --name Doubao --policy Proxy
 
     # 基于现有 list 补充
-    python har2list.py ./har/bilibili --base BiliBili.list
+    python har2list.py ./har/bilibili --base BiliBili.list --policy BiliBili
 """
 
 import json
@@ -221,6 +221,7 @@ def build_rules(
 def generate_list(
     har_folder: Path,
     name: str,
+    policy: str,
     output: Path,
     author: str,
     suffix_threshold: int,
@@ -273,13 +274,13 @@ def generate_list(
     lines.append(f"# TOTAL: {total}")
 
     for h in host_rules:
-        lines.append(f"HOST,{h}")
+        lines.append(f"HOST,{h},{policy}")
     for s in suffix_rules:
-        lines.append(f"HOST-SUFFIX,{s}")
+        lines.append(f"HOST-SUFFIX,{s},{policy}")
     for ip in ip_cidr_rules:
-        lines.append(f"IP-CIDR,{ip}")
+        lines.append(f"IP-CIDR,{ip},{policy}")
     for ip6 in ip6_cidr_rules:
-        lines.append(f"IP6-CIDR,{ip6}")
+        lines.append(f"IP6-CIDR,{ip6},{policy}")
 
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"\n已生成：{output}")
@@ -293,6 +294,7 @@ def generate_list(
 def supplement_list(
     har_folder: Path,
     base_path: Path,
+    policy: str,
     output: Path,
     suffix_threshold: int,
     exclude_patterns: list[str],
@@ -398,13 +400,13 @@ def supplement_list(
     if new_host_rules or new_suffix_rules or new_ip_rules:
         out_lines.append(f"# --- 以下为 HAR 补充规则 ({updated}) ---")
         for h in new_host_rules:
-            out_lines.append(f"HOST,{h}")
+            out_lines.append(f"HOST,{h},{policy}")
         for s in new_suffix_rules:
-            out_lines.append(f"HOST-SUFFIX,{s}")
+            out_lines.append(f"HOST-SUFFIX,{s},{policy}")
         for ip in new_ip_rules:
-            out_lines.append(f"IP-CIDR,{ip}")
+            out_lines.append(f"IP-CIDR,{ip},{policy}")
         for ip6 in new_ip6_rules:
-            out_lines.append(f"IP6-CIDR,{ip6}")
+            out_lines.append(f"IP6-CIDR,{ip6},{policy}")
 
     output.write_text("\n".join(out_lines) + "\n", encoding="utf-8")
     print(f"\n已生成：{output}")
@@ -421,6 +423,7 @@ def main():
     )
     parser.add_argument("folder", help="存放 HAR 文件的文件夹路径")
     parser.add_argument("--name", default=None, help="规则集名称（默认：文件夹名）")
+    parser.add_argument("--policy", default=None, help="QX 策略名（默认：同 name）")
     parser.add_argument("--output", default=None, help="输出文件路径（默认：<name>.list）")
     parser.add_argument("--author", default="Gwen", help="作者名（默认：Gwen）")
     parser.add_argument(
@@ -464,17 +467,19 @@ def main():
             print(f"错误：{base_path} 不存在")
             return
         name = args.name or base_path.stem
+        policy = args.policy or name
         output = Path(args.output) if args.output else list_dir / f"{name}_supplemented.list"
         supplement_list(
-            har_folder, base_path, output,
+            har_folder, base_path, policy, output,
             args.threshold, args.exclude, not args.no_ip,
         )
     else:
         # 全新生成模式
         name = args.name or har_folder.name
+        policy = args.policy or name
         output = Path(args.output) if args.output else list_dir / f"{name}.list"
         generate_list(
-            har_folder, name, output, args.author,
+            har_folder, name, policy, output, args.author,
             args.threshold, args.exclude, not args.no_ip,
         )
 
